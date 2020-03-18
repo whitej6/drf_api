@@ -19,3 +19,4 @@ COPY ./app /app
 
 USER ntc_user
 
+EXPOSE 8000

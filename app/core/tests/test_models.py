@@ -1,6 +1,12 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
+from core import models
+
+
+def sample_user(email='noreply@ntc.com', password='password'):
+    return get_user_model().objects.create_user(email, password)
+
 
 class ModelTest(TestCase):
     """
@@ -55,3 +61,50 @@ class ModelTest(TestCase):
 
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
+
+    def test_tag_str(self):
+        """
+
+        """
+
+        tag = models.Tag.objects.create(
+            user=sample_user(),
+            name='Vegan'
+        )
+        self.assertEqual(str(tag), tag.name)
+
+    def test_delivery_app_str(self):
+        """
+
+        """
+
+        delivery_app = models.DeliveryApp.objects.create(
+            name='Door Dash'
+        )
+        self.assertEqual(str(delivery_app), delivery_app.slug)
+
+    def test_restaurant_str(self):
+        """
+
+        """
+        delivery_app = models.DeliveryApp.objects.create(
+            name='Door Dash'
+        )
+        restaurant = models.Restaurant.objects.create(
+            name='Foobar Bar',
+            address_line_1='123 Main St',
+            address_line_2='Suite 123',
+            city='Houston',
+            state='Tx',
+            zip_code='77001',
+            phonenumber='111-222-3333',
+            hours='Mon-Sun 8:00am-5:00pm',
+            dine_in=False,
+            take_out=True,
+            curbside=True,
+            delivery=True,
+            website='https://FoobarBar.com',
+            user=sample_user()
+        )
+        restaurant.delivery_apps.add(delivery_app)
+        self.assertEqual(str(restaurant), restaurant.name)

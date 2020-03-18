@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}Open Local Restaurants{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'jquery-ui-1.12.1/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'select2-4.0.5/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'select2-bootstrap-0.1.0-beta.10/select2-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'css/typeahead.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap.min.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'img/virus.png' %}">
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/typeahead.bundle.js' %}"></script>
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    {% block head %} {% endblock head %}
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top ">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">
+                    <img style="height:100%;" src="{% static 'img/virus.png' %}" />
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <ol style="margin-bottom: 0; padding-top: 15px" class="breadcrumb">
+                            {% block breadcrumb %}
+                            <li class="breadcrumb-item active"><a href="/">Open Local Restaurants</a></li>
+                            {% if request.user.is_authenticated %}
+                            <li class="breadcrumb-item active"><a href="/restaurant/create/">Add A New Restaurant</a></li>
+                            {% endif %}
+                            {% endblock breadcrumb %}
+                        </ol>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if request.user.is_authenticated %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="{{ request.user }}" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-user"></i>
+                                <span id="navbar_user">{{ request.user|truncatechars:"30" }}</span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% if request.user.is_staff %}
+                                    <li><a href="{% url 'admin:index' %}"><i class="fa fa-cogs"></i> Admin</a></li>
+                                {% endif %}
+                                <li class="divider"></li>
+                                <li><a href="/logout/"><i class="fa fa-sign-out"></i> Log out</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="/login/?next={{ request.path }}"><i class="fa fa-sign-in"></i> Log in</a></li>
+                    {% endif %}
+                </ul>
+            {% block controls %}{% endblock controls %}
+        </div>
+    </nav>
+    <div class="container wrapper">
+        {% block header %}{% endblock %}
+        {% block content %}{% endblock %}
+        <div class="push"></div>
+    </div>
+<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'select2-4.0.5/js/select2.min.js' %}"></script>
+<script src="{% static 'js/forms.js' %}"></script>
+{% block javascript %}{% endblock %}
+</body>
+</html>

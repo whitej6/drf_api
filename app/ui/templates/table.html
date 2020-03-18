@@ -1,0 +1,83 @@
+{% extends '_base.html' %}
+{% block title %}Open Local Restaurants{% endblock title %}
+
+{% block content %}
+
+
+<div id="table_wrapper_div" class="panel panel-default">
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Hours</th>
+                <th>Dine In</th>
+                <th>Take Out</th>
+                <th>Curbside</th>
+                <th>Delivery</th>
+                <th>Delivery Apps</th>
+                <th>Email</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+{% for i in restaurants %}
+            <tr>
+                <td>
+                    <a href="{{ i.website }}">{{ i.name }}</a>
+                </td>
+                <td>
+                    {{ i.address_line_1 }}<br/>
+                    {{ i.address_line_2 }}<br/>
+                    {{ i.city }}, {{ i.state }} {{ i.zip_code}}
+                </td>
+                <td>
+                    {{ i.phonenumber }}
+                </td>
+                <td>
+                    {{ i.hours }}
+                </td>
+                <td>
+                    {% if i.dine_in %}<label class="label label-success">&#10004;</label>{% else %}<label class="label label-danger">&#10008;</label>{% endif %}
+                </td>
+                <td>
+                    {% if i.take_out %}<label class="label label-success">&#10004;</label>{% else %}<label class="label label-danger">&#10008;</label>{% endif %}
+                </td>
+                <td>
+                    {% if i.curbside %}<label class="label label-success">&#10004;</label>{% else %}<label class="label label-danger">&#10008;</label>{% endif %}
+                </td>
+                <td>
+                    {% if i.delivery %}<label class="label label-success">&#10004;</label>{% else %}<label class="label label-danger">&#10008;</label>{% endif %}
+                </td>
+                <td>
+                    {% for app in i.delivery_apps %}<label class="label label-info">{{ app }}</label> {% endfor %}
+                </td>
+                <td>
+                    {{ i.email }}
+                </td>
+                <td>
+                    {{ i.notes }}
+                </td>
+
+            </tr>
+{% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Hours</th>
+                <th>Dine In</th>
+                <th>Take Out</th>
+                <th>Curbside</th>
+                <th>Delivery</th>
+                <th>Delivery Apps</th>
+                <th>Email</th>
+                <th>Notes</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+{% endblock content %}
