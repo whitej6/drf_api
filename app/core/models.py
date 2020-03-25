@@ -81,16 +81,18 @@ class Restaurant(models.Model):
     hours = models.CharField(max_length=255)
     dine_in = models.BooleanField(default=False)
     take_out = models.BooleanField(default=False)
+    drive_thru = models.BooleanField(default=False)
     curbside = models.BooleanField(default=False)
     delivery = models.BooleanField(default=False)
     delivery_apps = models.ManyToManyField(DeliveryApp, blank=True)
     website = models.URLField(max_length=255)
-    email = models.EmailField(max_length=255)
+    email = models.EmailField(max_length=255, blank=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
     notes = models.CharField(max_length=255, blank=True)
+    date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name

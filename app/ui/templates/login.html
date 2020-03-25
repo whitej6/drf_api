@@ -4,19 +4,6 @@
 {% block content %}
 <div class="row" style="margin-top: {% if settings.BANNER_LOGIN %}100{% else %}150{% endif %}px;">
     <div class="col-sm-4 col-sm-offset-4">
-        {% if settings.BANNER_LOGIN %}
-            <div style="margin-bottom: 25px">
-                {{ settings.BANNER_LOGIN|safe }}
-            </div>
-        {% endif %}
-        {% if form.non_field_errors %}
-            <div class="panel panel-danger">
-                <div class="panel-heading"><strong>Errors</strong></div>
-                <div class="panel-body">
-                    {{ form.non_field_errors }}
-                </div>
-            </div>
-        {% endif %}
         <form action="{% url 'login' %}" method="post" class="form form-horizontal">
             <div class="panel panel-default">
                 <div class="panel-heading">

@@ -23,8 +23,8 @@
     {% block head %} {% endblock head %}
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top ">
-        <div class="container">
+    <nav style="padding-right:2%; padding-left:2%;" class="navbar navbar-default navbar-fixed-top ">
+        <div >
             <div class="navbar-header">
                 <a class="navbar-brand" href="/">
                     <img style="height:100%;" src="{% static 'img/virus.png' %}" />
@@ -36,14 +36,15 @@
                         <ol style="margin-bottom: 0; padding-top: 15px" class="breadcrumb">
                             {% block breadcrumb %}
                             <li class="breadcrumb-item active"><a href="/">Open Local Restaurants</a></li>
-                            {% if request.user.is_authenticated %}
-                            <li class="breadcrumb-item active"><a href="/restaurant/create/">Add A New Restaurant</a></li>
-                            {% endif %}
+                            <li class="breadcrumb-item active"><a href="{% if request.user.is_authenticated %}/restaurant/create/{% else %}https://docs.google.com/forms/d/1so-y_ONIXakX7S8YgfU1C4GZsVnZR2wG-h7rxkQ6n84/viewform?ts=5e727180{% endif %}" target="_blank">Add A New Restaurant</a></li>
+                            
+                            
                             {% endblock breadcrumb %}
                         </ol>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    {% block search %}{% endblock %}
                     {% if request.user.is_authenticated %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="{{ request.user }}" role="button" aria-haspopup="true" aria-expanded="false">
@@ -66,7 +67,7 @@
             {% block controls %}{% endblock controls %}
         </div>
     </nav>
-    <div class="container wrapper">
+    <div style="padding-right:2%; padding-left:2%;" class="wrapper">
         {% block header %}{% endblock %}
         {% block content %}{% endblock %}
         <div class="push"></div>

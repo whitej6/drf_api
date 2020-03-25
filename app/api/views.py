@@ -28,3 +28,6 @@ class RestaurantViewSet(viewsets.GenericViewSet,
     queryset = Restaurant.objects.all()
     serializer_class = serializers.RestaurantSerializer
     authentication_classes = (BasicAuthentication,)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

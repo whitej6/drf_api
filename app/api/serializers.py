@@ -22,15 +22,37 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ['name', 'email']
 
+
+class DeliveryAppField(serializers.RelatedField):
+    """
+
+    """
+    def get_queryset(self):
+        return DeliveryApp.objects.all()
+
+    def to_representation(self, value):
+        return value.name
+
+    def to_internal_value(self, data):
+        try:
+            app = DeliveryApp.objects.get(name=data)
+        except DeliveryApp.DoesNotExist:
+            app = DeliveryApp.objects.create(name=data)
+        return app.pk
+
+
 class RestaurantSerializer(serializers.ModelSerializer):
     """
 
     """
-    user = UserSerializer()
-    delivery_apps = serializers.StringRelatedField(many=True)
+    user = UserSerializer(required=False)
+    delivery_apps = DeliveryAppField(many=True)
+    date_modified = serializers.SerializerMethodField()
     
     class Meta:
         model = Restaurant
         fields = '__all__'
         read_only_fields = ['id']
-        
+    
+    def get_date_modified(self, obj):
+        return obj.date_modified.strftime('%m-%d-%Y %H:%M UTC')

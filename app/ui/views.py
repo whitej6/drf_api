@@ -17,20 +17,33 @@ from rest_framework.permissions import IsAuthenticated
 
 from core.models import Restaurant, User
 from api.serializers import RestaurantSerializer
-from .forms import LoginForm, CreateUserForm, RestaurantForm
+from .filters import RestaurantFilter
+from .forms import LoginForm, CreateUserForm, RestaurantForm, SearchForm
 
-class Index(TemplateView):
+
+class IndexView(TemplateView):
+    """View that displays initial entrypoint into app"""
+    template_name = "index.html"
+
+    def get(self, request):
+        form = SearchForm()
+        return render(request, self.template_name, {
+            'form': form
+        })
+
+
+class SearchView(TemplateView):
     """View that displays initial entrypoint into app"""
     template_name = "table.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        restaurants = Restaurant.objects.all()
-        serializer = RestaurantSerializer(instance=restaurants, many=True)
-        context['restaurants'] = serializer.data
-
-        return context
+    def get(self, request):
+        form = SearchForm()
+        restaurants = RestaurantFilter(request.GET, queryset=Restaurant.objects.all())
+        serializer = RestaurantSerializer(instance=restaurants.qs, many=True)
+        return render(request, self.template_name, {
+            'form': form,
+            'restaurants': serializer.data
+        })
 
 
 class LoginView(View):
@@ -196,21 +209,18 @@ class CreateUserView(ObjectEditView):
         form = self.model_form(request.POST, request.FILES, instance=obj)
 
         if form.is_valid():
-            url = 'http://' + self.request.get_host() + '/api/user/create/'
-            r = requests.post(
-                url,
-                data={
-                    'name': form.data['name'],
-                    'email': form.data['email'],
-                    'password': form.data['password1'],
-                }
-            )
-            if r.ok:
+            try:
+                user = User.objects.create(**{
+                        'name': form.data['name'],
+                        'email': form.data['email']
+                    })
+                user.set_password(form.data['password1'])
+                user.save()
                 messages.success(request, mark_safe(r"{form.data['email']} user created"))
                 return HttpResponseRedirect(reverse('ui:index'))
-            messages.error(request, mark_safe(r"{str(form.data)}"))
-            return HttpResponseRedirect(reverse('createuser'))
-        print(form)
+            except:
+                messages.error(request, mark_safe(r"{str(form.data)}"))
+                return HttpResponseRedirect(reverse('createuser'))
         return render(request, self.template_name, {
             'obj': obj,
             'obj_type': self.model._meta.verbose_name,

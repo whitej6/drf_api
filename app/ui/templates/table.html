@@ -1,6 +1,30 @@
 {% extends '_base.html' %}
+{% load form_helpers %}
 {% block title %}Open Local Restaurants{% endblock title %}
-
+{% block search %}
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Search" role="button" aria-haspopup="true" aria-expanded="false">
+        <i class="fa"></i>
+        <span>Search</span>
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+        <li>
+            <form action="." method="get" class="form">
+                {% render_form form %}
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary">
+                        <span class="fa fa-search" aria-hidden="true"></span> Apply
+                    </button>
+                    <a href="." class="btn btn-default">
+                        <span class="fa fa-remove" aria-hidden="true"></span> Clear
+                    </a>
+                </div>
+            </form>
+        </li>
+    </ul>
+</li>
+{% endblock %}
 {% block content %}
 
 
@@ -14,11 +38,13 @@
                 <th>Hours</th>
                 <th>Dine In</th>
                 <th>Take Out</th>
+                <th>Drive Thru</th>
                 <th>Curbside</th>
                 <th>Delivery</th>
                 <th>Delivery Apps</th>
                 <th>Email</th>
                 <th>Notes</th>
+                <th>Last Modified</th>
             </tr>
         </thead>
         <tbody>
@@ -28,8 +54,7 @@
                     <a href="{{ i.website }}">{{ i.name }}</a>
                 </td>
                 <td>
-                    {{ i.address_line_1 }}<br/>
-                    {{ i.address_line_2 }}<br/>
+                    {{ i.address_line_1 }}<br/>{% if i.address_line_2 %}{{ i.address_line_2 }}<br/>{% endif %}
                     {{ i.city }}, {{ i.state }} {{ i.zip_code}}
                 </td>
                 <td>
@@ -45,6 +70,9 @@
                     {% if i.take_out %}<label class="label label-success">&#10004;</label>{% else %}<label class="label label-danger">&#10008;</label>{% endif %}
                 </td>
                 <td>
+                    {% if i.drive_thru %}<label class="label label-success">&#10004;</label>{% else %}<label class="label label-danger">&#10008;</label>{% endif %}
+                </td>
+                <td>
                     {% if i.curbside %}<label class="label label-success">&#10004;</label>{% else %}<label class="label label-danger">&#10008;</label>{% endif %}
                 </td>
                 <td>
@@ -54,12 +82,14 @@
                     {% for app in i.delivery_apps %}<label class="label label-info">{{ app }}</label> {% endfor %}
                 </td>
                 <td>
-                    {{ i.email }}
+                    {% if i.email %}<a href="mailto:{{ i.email }}">Email</a>{% else %}Email not provided{% endif %}
                 </td>
                 <td>
                     {{ i.notes }}
                 </td>
-
+                <td>
+                    {{ i.date_modified }}
+                </td>
             </tr>
 {% endfor %}
         </tbody>
@@ -71,11 +101,13 @@
                 <th>Hours</th>
                 <th>Dine In</th>
                 <th>Take Out</th>
+                <th>Drive Thru</th>
                 <th>Curbside</th>
                 <th>Delivery</th>
                 <th>Delivery Apps</th>
                 <th>Email</th>
                 <th>Notes</th>
+                <th>Last Modified</th>
             </tr>
         </tfoot>
     </table>

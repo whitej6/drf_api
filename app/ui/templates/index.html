@@ -1,0 +1,29 @@
+{% extends '_base.html' %}
+{% load form_helpers %}
+
+{% block content %}
+<div class="row" style="margin-top:150px;">
+    <div class="col-sm-4 col-sm-offset-4">
+        <form action="{% url 'ui:search' %}" method="get" class="form">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Search Restaurants</strong>
+                </div>
+                <div class="panel-body">
+                    {% render_form form %}
+                </div>
+                <div class="panel-footer text-right">
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="fa fa-search" aria-hidden="true"></span> Apply
+                        </button>
+                        <a href="." class="btn btn-default">
+                            <span class="fa fa-remove" aria-hidden="true"></span> Clear
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
