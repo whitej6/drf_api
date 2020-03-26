@@ -208,10 +208,12 @@ class CreateUserView(ObjectEditView):
 
         if form.is_valid():
             try:
-                user = User.objects.create(**{
+                user = User.objects.create(
+                    **{
                         'name': form.data['name'],
                         'email': form.data['email']
-                    })
+                    }
+                )
                 user.set_password(form.data['password1'])
                 user.save()
                 messages.success(request, mark_safe(r"{form.data['email']} user created"))
