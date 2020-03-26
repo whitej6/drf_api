@@ -62,17 +62,6 @@ class ModelTest(TestCase):
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
 
-    def test_tag_str(self):
-        """
-
-        """
-
-        tag = models.Tag.objects.create(
-            user=sample_user(),
-            name='Vegan'
-        )
-        self.assertEqual(str(tag), tag.name)
-
     def test_delivery_app_str(self):
         """
 
@@ -81,7 +70,7 @@ class ModelTest(TestCase):
         delivery_app = models.DeliveryApp.objects.create(
             name='Door Dash'
         )
-        self.assertEqual(str(delivery_app), delivery_app.slug)
+        self.assertEqual('door-dash', delivery_app.slug)
 
     def test_restaurant_str(self):
         """
