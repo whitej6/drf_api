@@ -48,11 +48,11 @@ class RestaurantSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
     delivery_apps = DeliveryAppField(many=True)
     date_modified = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Restaurant
         fields = '__all__'
         read_only_fields = ['id']
-    
+
     def get_date_modified(self, obj):
         return obj.date_modified.strftime('%m-%d-%Y %H:%M UTC')

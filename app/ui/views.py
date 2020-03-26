@@ -1,9 +1,8 @@
 from django.contrib import messages
-from django.contrib.auth import login as auth_login, logout as auth_logout, update_session_auth_hash
+from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.http import HttpResponseForbidden, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.html import escape
@@ -12,8 +11,6 @@ from django.utils.safestring import mark_safe
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 from django.views.decorators.debug import sensitive_post_parameters
-import requests
-from rest_framework.permissions import IsAuthenticated
 
 from core.models import Restaurant, User
 from api.serializers import RestaurantSerializer
@@ -119,6 +116,7 @@ class GetReturnURLMixin(object):
 
         # If all else fails, return home. Ideally this should never happen.
         return reverse('index')
+
 
 class ObjectEditView(GetReturnURLMixin, View):
     """
@@ -228,6 +226,7 @@ class CreateUserView(ObjectEditView):
             'return_url': self.get_return_url(request, obj),
         })
 
+
 @method_decorator(login_required, name='dispatch')
 class CreateRestaurantView(ObjectEditView):
     model = Restaurant
@@ -272,4 +271,3 @@ class CreateRestaurantView(ObjectEditView):
             'form': form,
             'return_url': self.get_return_url(request, obj),
         })
-
